@@ -17,11 +17,11 @@ The goal is to have a reliable library that accounts for explicit allocation, re
 
 The support code consists of three directories:
 
-- `src/` will contain your solution
-- `tests/` contains the test suite and a Python script to verify your work
-- `utils/` contains `osmem.h` that describes your library interface, `block_meta.h` which contains details of `struct block_meta`, and an implementation for `printf()` function that does **NOT** use the heap
+- `src/` contains solution
+- `tests/` contains the test suite and a Python script to verify work
+- `utils/` contains `osmem.h` that describes the library interface, `block_meta.h` which contains details of `struct block_meta`, and an implementation for `printf()` function that does **NOT** use the heap
 
-The test suite consists of `.c` files that will be dynamically linked to your library, `libosmem.so`.
+The test suite consists of `.c` files that will be dynamically linked to  the library, `libosmem.so`.
 You can find the sources in the `tests/snippets/` directory.
 The results of the previous will also be stored in `tests/snippets/` and the reference files are in the `tests/ref/` directory.
 
@@ -77,10 +77,10 @@ It runs each test and compares the syscalls made by the `os_*` functions with th
 1. General
 
    - Allocations that increase the heap size will only expand the last block if it is free.
-   - You are allowed to use `sbrk()` instead of `brk()`, in view of the fact that [on Linux](https://man7.org/linux/man-pages/man2/brk.2.html#NOTES) `sbrk()` is implemented using the `brk()`.
-   - Do **NOT** use [`mremap()`](https://man7.org/linux/man-pages/man2/mremap.2.html)
-   - You must check the error code returned by every syscall.
-   You can use the `DIE()` macro for this.
+   - `sbrk()` is used instead of `brk()`, in view of the fact that [on Linux](https://man7.org/linux/man-pages/man2/brk.2.html#NOTES) `sbrk()` is implemented using the `brk()`.
+   - [`mremap()`](https://man7.org/linux/man-pages/man2/mremap.2.html) is **NOT** used.
+   - Every syscall error code returned is checked.
+   `DIE()` macro is used for this.
 
 ## Implementation
 
@@ -115,7 +115,7 @@ struct block_meta {
 
 _Note_: Both the `struct block_meta` and the **payload** of a block should be aligned to **8 bytes**.
 
-_Note_: Most compilers will automatically pad the structure, but you should still align it for portability.
+_Note_: Most compilers will automatically pad the structure, but it is still aligned for portability.
 
 ![memory-block](./img/memory-block.svg)
 
@@ -145,7 +145,7 @@ One technique to reduce external memory fragmentation is **block coalescing** wh
 
 Coalescing will be used before searching for a block and in `os_realloc()` to expand the current block when possible.
 
-_Note_: You might still need to split the block after coalesce.
+_Note_: Might still need to split the block after coalesce.
 
 #### Find Best Block
 
